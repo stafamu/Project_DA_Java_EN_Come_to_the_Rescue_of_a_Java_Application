@@ -7,41 +7,39 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Simple brute force implementation
- *
+ * A simple implementation of ISymptomReader that reads symptom data from a file.
  */
 public class ReadSymptomDataFromFile implements ISymptomReader {
+    private String filepath;
 
-	private String filepath;
-	
-	/**
-	 * 
-	 * @param filepath a full or partial path to file with symptom strings in it, one per line
-	 */
-	public ReadSymptomDataFromFile (String filepath) {
-		this.filepath = filepath;
-	}
-	
-	@Override
-	public List<String> GetSymptoms() {
-		ArrayList<String> result = new ArrayList<String>();
-		
-		if (filepath != null) {
-			try {
-				BufferedReader reader = new BufferedReader (new FileReader(filepath));
-				String line = reader.readLine();
-				
-				while (line != null) {
-					result.add(line);
-					line = reader.readLine();
-				}
-				reader.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-		
-		return result;
-	}
+    /**
+     * Constructor that initializes the filepath for reading symptoms.
+     * 
+     * @param filepath A full or partial path to a file with symptom strings in it, one per line.
+     */
+    public ReadSymptomDataFromFile(String filepath) {
+        this.filepath = filepath;
+    }
 
+    /**
+     * Reads symptoms from the specified file and returns them as a list.
+     * 
+     * @return A list of all symptoms read from the file. Duplicates are possible/probable.
+     */
+    @Override
+    public List<String> getSymptoms() {
+        ArrayList<String> symptoms = new ArrayList<>();
+        if (filepath != null) {
+            try (BufferedReader reader = new BufferedReader(new FileReader(filepath))) {
+                String line = reader.readLine();
+                while (line != null) {
+                    symptoms.add(line);
+                    line = reader.readLine();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return symptoms;
+    }
 }
